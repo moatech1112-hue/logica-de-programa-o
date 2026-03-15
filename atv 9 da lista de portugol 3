@@ -1,0 +1,21 @@
+programa {
+
+   funcao inicio() {
+   
+      real despesa1, despesa2
+      real total, gorjeta
+      
+      escreva("Valor da despesa 1: ")
+      leia(despesa1)
+      
+      escreva("Valor da despesa 2: ")
+      leia(despesa2)
+      
+      gorjeta = (despesa1 + despesa2) * 10 / 100
+      
+      total = despesa1 + despesa2 + gorjeta
+      
+      escreva("Valor da gorjeta: ", gorjeta, "\n")
+      escreva("Total com gorjeta: ", total)
+   }
+}
