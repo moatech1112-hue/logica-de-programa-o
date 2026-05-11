@@ -1,0 +1,52 @@
+package faculdade2Unidade;
+
+import java.util.Scanner;
+
+public class modularizacao {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int numA,numB,soma,sub;
+		String menu;
+	
+		
+		System.out.println("escolha um número: "); numA = sc.nextInt();
+		System.out.println("escolha outro numero: "); numB= sc.nextInt();
+		System.out.println("escolha a opção 1 para somar e 2 para subtrair: "); menu= sc.next();
+		
+		
+		switch (menu) {
+		case "1":
+		soma= somar(numA,numB);
+		 System.out.println("a soma é " + soma);
+		break;
+		case "2": 
+			sub=subtrair(numA,numB);
+		 System.out.println("a subtração é"+ sub);
+		break;
+		default: if (menu != "1"|| menu!="2") {
+			System.out.println("escolha a opção 1 para somar e 2 para subtrair: "); menu= sc.next();
+			switch (menu) {
+			case "1":
+			soma= somar(numA,numB);
+			 System.out.println("a soma é " + soma);
+			break;
+			case "2": 
+				sub=subtrair(numA,numB);
+			 System.out.println("a subtração é "+ sub);
+			break;
+			
+	
+			
+		}
+		}
+		}
+		}
+		
+
+
+		
+		
+	
+
+	
