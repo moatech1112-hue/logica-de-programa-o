@@ -1,0 +1,220 @@
+package trabalhoLPA;
+
+import java.util.Scanner;
+
+public class trabalho {
+	public static int quantidadeItens = 0;
+
+	public static void main(String[] args) {
+
+		Scanner x = new Scanner(System.in);
+
+		double soma = 0;
+		String[] nomeProduto = new String[20];
+		int[] quantidadeProduto = new int[20];
+		double[] precoCarrinho = new double[20];
+		double[] totalCarrinho = new double[20];
+
+		boolean rodando = true;
+		int opcao;
+		int[] limiteEstoque = new int[32];
+
+		String produtos[] = { "Pão de forma tradicional", "Macarrão", "Placa de 12 ovos", "Feijão", "Arroz", "Cuscuz",
+				"Queijo mussarela", "Leite", "Café", "Molho de tomate", "Azeite de oliva", "Óleo de soja",
+				"Pizza congelada", "Batata palito", "Filé de peito", "Patinho moído", "Detergente líquido",
+				"Água sanitária", "Desinfetante", "Esponja multiuso", "Papel Higiênico", "Creme dental",
+				"Sabonete em barra", "Sabonete líquido", "Desodorante aerosol", "Absorvente",
+				"Kit shampoo e condicionador", "Tortilha integral Rap10", "Água mineral", "Refrigerante Coca Cola",
+				"Suco Dell Valle Laranja", "Refrigerante H2Oh Limão" };
+
+		double precos[] = { 8.50, 3.89, 12.50, 8.00, 5.00, 3.00, 35.00, 7.50, 23.99, 5.50, 29.90, 5.99, 21.99, 30.00,
+				19.99, 24.99, 2.19, 3.89, 9.99, 8.99, 34.99, 7.99, 2.98, 15.98, 12.79, 25.99, 39.99, 10.99, 2.19, 6.49,
+				8.49, 4.39 };
+
+		for (int i = 0; i < limiteEstoque.length; i++) {
+			limiteEstoque[i] = 50;
+		}
+		while (rodando) {
+			System.out.println("Escolha a opção desejada: \n" + "1 - Visualizar catálogo\n"
+					+ "2 - Adicionar itens ao carrinho\n" + "3 - Exibir carrinho de compras\n"
+					+ "4 - Remover item do carrinho\n" + "5 - Finalizar compras e exibir total geral\n");
+			System.out.print("Opção do menu: ");
+			opcao = x.nextInt();
+
+			switch (opcao) {
+			case 1:
+				exibirCatalogo(produtos, precos);
+				break;
+			case 2:
+				adicionarCarrinho(produtos, precos, x, nomeProduto, quantidadeProduto, precoCarrinho, totalCarrinho,
+						limiteEstoque);
+				break;
+			case 3:
+				exibirCarrinho(nomeProduto, quantidadeProduto, precoCarrinho, totalCarrinho);
+				break;
+			case 4:
+				removerItem(x, nomeProduto, quantidadeProduto, precoCarrinho, totalCarrinho);
+				break;
+			case 5:
+				calcularTotal(totalCarrinho, soma, x, nomeProduto, quantidadeProduto, precoCarrinho);
+				rodando = false;
+				break;
+			default:
+				System.out.println("Opção inválida! Digite novamente.");
+			}
+		}
+
+		x.close();
+	}
+
+	public static void exibirCatalogo(String produtos[], double precos[]) {
+		for (int i = 0; i < produtos.length; i++) {
+			System.out.println((i + 1) + " - " + produtos[i] + ": R$ " + precos[i]);
+		}
+	}
+
+	public static void adicionarCarrinho(String produtos[], double precos[], Scanner x, String nomeProduto[],
+			int quantidadeProduto[], double precoCarrinho[], double totalCarrinho[], int[] limiteEstoque) {
+
+		int produto, quantidade;
+
+		if (quantidadeItens >= 20) {
+			System.out.println("Carrinho cheio! Máximo de 20 itens.");
+			return;
+		}
+
+		System.out.print("Informe o número do produto: ");
+		produto = x.nextInt() - 1;
+
+		while (produto < 0 || produto >= 32) {
+			System.out.println("Opção inválida! Escolha de 1 a 32.");
+			exibirCatalogo(produtos, precos);
+			System.out.print("Informe o número do produto: ");
+			produto = x.nextInt() - 1;
+
+		}
+
+		System.out.print("Quantidade: ");
+		quantidade = x.nextInt();
+
+		if (limiteEstoque[produto] >= quantidade) {
+
+			nomeProduto[quantidadeItens] = produtos[produto];
+			quantidadeProduto[quantidadeItens] = quantidade;
+			precoCarrinho[quantidadeItens] = precos[produto];
+			totalCarrinho[quantidadeItens] = quantidade * precos[produto];
+
+			quantidadeItens++;
+			limiteEstoque[produto] = limiteEstoque[produto] - quantidade;
+		} else {
+			System.out.println("Estoque insuficiente! Disponível: " + limiteEstoque[produto]);
+		}
+	}
+
+	public static void exibirCarrinho(String nomeProduto[], int quantidadeProduto[], double precoCarrinho[],
+			double totalCarrinho[]) {
+
+		if (quantidadeItens == 0) {
+			System.out.println("Carrinho vazio!");
+		} else {
+			for (int i = 0; i < quantidadeItens; i++) {
+				System.out.println((i + 1) + " - " + nomeProduto[i] + " | Quantidade: " + quantidadeProduto[i]
+						+ " | Preço: R$ " + precoCarrinho[i] + " | Total: R$ " + totalCarrinho[i]);
+			}
+		}
+	}
+
+	public static void removerItem(Scanner x, String nomeProduto[], int quantidadeProduto[], double precoCarrinho[],
+			double totalCarrinho[]) {
+
+		if (quantidadeItens == 0) {
+			System.out.println("Carrinho vazio!");
+			return;
+		}
+
+		System.out.println("Itens no carrinho:");
+		for (int i = 0; i < quantidadeItens; i++) {
+			System.out.println((i + 1) + " - " + nomeProduto[i]);
+		}
+
+		System.out.print("Digite o número do item que deseja remover: ");
+		int remover = x.nextInt() - 1;
+
+		while (remover < 0 || remover >= quantidadeItens) {
+			System.out.println("Opção inválida! Escolha de 1 a " + quantidadeItens + " .");
+			System.out.print("Digite o número do item que deseja remover: ");
+			remover = x.nextInt() - 1;
+		}
+
+		for (int i = remover; i < quantidadeItens - 1; i++) {
+			nomeProduto[i] = nomeProduto[i + 1];
+			quantidadeProduto[i] = quantidadeProduto[i + 1];
+			precoCarrinho[i] = precoCarrinho[i + 1];
+			totalCarrinho[i] = totalCarrinho[i + 1];
+		}
+
+		quantidadeItens--;
+		System.out.println("Item removido com sucesso!");
+	}
+
+	public static void calcularTotal(double totalCarrinho[], double soma, Scanner x, String nomeProduto[],
+			int quantidadeProduto[], double precoCarrinho[]) {
+
+		for (int i = 0; i < quantidadeItens; i++) {
+			soma = soma + totalCarrinho[i];
+		}
+
+		double totalDeDesconto = cupomDesconto(soma, x);
+
+		System.out.println("--------------------------------------------------------");
+		System.out.printf("%-30s %-15s %s%n", "Item", "Quantidade", "Preço");
+		System.out.println("--------------------------------------------------------");
+		for (int i = 0; i < quantidadeItens; i++) {
+			System.out.printf("%-30s %-15d R$ %.2f%n", nomeProduto[i], quantidadeProduto[i], totalCarrinho[i]);
+
+		}
+
+		System.out.println("--------------------------------------------------------");
+		if (totalDeDesconto != 0) {
+			System.out.println("Desconto: R$ " + totalDeDesconto);
+		}
+		System.out.printf("%-30s %-15s R$ %.2f%n", "TOTAL:", "", (soma - totalDeDesconto));
+	}
+
+	public static double cupomDesconto(double soma, Scanner x) {
+		String cupom;
+		double total = 0;
+
+		boolean cupomValido = false;
+
+		while (!cupomValido) {
+			System.out.print("Informe o cupom (se não possuir, digite 1): ");
+			cupom = x.next();
+
+			switch (cupom) {
+			case "DESCONTO15":
+				total = 0.15 * soma;
+				cupomValido = true;
+				break;
+			case "PROMO10":
+				total = 0.1 * soma;
+				cupomValido = true;
+				break;
+			case "BLACK20":
+				total = 0.2 * soma;
+				cupomValido = true;
+				break;
+			case "GANHE5":
+				total = 0.05 * soma;
+				cupomValido = true;
+				break;
+			case "1":
+				cupomValido = true;
+				break;
+			default:
+				System.out.println("Cupom Inválido! Tente novamente.");
+
+			}
+		}
+		return total;
+	}
